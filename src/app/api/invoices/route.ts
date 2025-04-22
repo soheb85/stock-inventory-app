@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import PartnerTransaction from "../../models/Invoices";
 import StockModel from "../../models/TotalStock"; // Your stock model
-import PartnerModel from "../../models/Partners";
 
 export async function GET() {
   await connectDB();
@@ -32,12 +31,14 @@ export async function POST(req: Request) {
       partner,
       items,
     });
+
+    console.log(newTxn);
   
     return NextResponse.json({
       success: true,
       tid,
       partner: partner.name || partner.pid || partner, // optional: return readable name
-      items: items.map(({ item, quantity }) => ({ item, quantity })),
+      items: items.map(({ item, quantity }:{item:string,quantity:number}) => ({ item, quantity })),
     });
   }
   

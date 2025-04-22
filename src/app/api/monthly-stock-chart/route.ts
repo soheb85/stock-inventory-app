@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectDB } from "@/lib/mongoose";
 import Stock from "../../models/Stock";
 import PartnerTransaction from "../../models/Invoices";
@@ -5,6 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   await connectDB();
+
+  console.log(req);
 
   const allStocks = await Stock.find({});
   const allOutTxns = await PartnerTransaction.find({});
@@ -18,12 +21,11 @@ export async function GET(req: NextRequest) {
     const date = new Date(stock.createdAt);
     const month = date.toLocaleString("default", { month: "long", year: "numeric" });
 
-    const quantity = Array.from(stock.items.values()).reduce((a, b) => a + b, 0);
+    const quantity = Array.from(stock.items.values()).reduce((a:number, b:any) => a + b, 0);
 
     if (!monthlyData[month]) {
       monthlyData[month] = { IN: 0, OUT: 0 };
     }
-
     monthlyData[month].IN += quantity;
   }
 
@@ -31,7 +33,7 @@ export async function GET(req: NextRequest) {
   for (const txn of allOutTxns) {
     const date = new Date(txn.date); // Use txn.date field
     const month = date.toLocaleString("default", { month: "long", year: "numeric" });
-
+    
     const quantity = txn.items.reduce((sum: number, item: any) => sum + item.quantity, 0);
 
     if (!monthlyData[month]) {

@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription,AlertDialogFooter,AlertDialogCancel, } from "@/components/ui/alert-dialog";
@@ -37,6 +39,7 @@ export default function Page() {
     const filteredItems = Object.entries(items)
       .filter(([_, qty]) => qty > 0)
       .map(([item, quantity]) => ({ item, quantity }));
+      
 
     if (!selectedPartner || filteredItems.length === 0) {
       alert("Select partner and add items"); // replace later with better UI
@@ -61,7 +64,18 @@ export default function Page() {
     if (res.ok) {
       setTransactionId(data.tid);
       setOpenAlert(true);
-      setItems({ tape: 0, box: 0, label: 0, foam: 0, carton: 0, wrapper: 0, sticker: 0, seal: 0 });
+      setItems({
+        "tape normal": 0,
+        "tape fragile": 0,
+        "pp box": 0,
+        "stretch film": 0,
+        "foam blanket nt": 0,
+        "foam blanket normal": 0,
+        "tv box 43": 0,
+        "tv box 53": 0,
+        "cc role": 0,
+        "bubble role": 0,
+      });
     } else {
       alert("Something went wrong");
     }

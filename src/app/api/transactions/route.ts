@@ -1,5 +1,5 @@
 // /app/api/transactions/route.ts
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { connectDB } from "@/lib/mongoose";
 import Stock from "../../models/Stock";
 import PartnerTransaction from "../../models/Invoices";
@@ -11,7 +11,7 @@ export async function GET() {
   const inStocks = await Stock.find({ status: "IN" }).sort({ createdAt: 1 });
   const outTxns = await PartnerTransaction.find({}).sort({ date: 1 });
 
-  let allTransactions: any[] = [];
+  const allTransactions: any[] = [];
 
   // 🟢 Process IN Stocks
   inStocks.forEach((stock, index) => {

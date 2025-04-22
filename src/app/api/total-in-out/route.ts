@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Stock from "../../models/Stock";
@@ -7,13 +8,14 @@ import TotalStock from "../../models/TotalStock"; // Import the TotalStock model
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
+    console.log(req)
 
     // Step 1: Calculate totalIn from Stock collection (based on status "IN")
     const allStocks = await Stock.find({});
     let totalIn = 0;
 
     for (const stock of allStocks) {
-      const quantities = Array.from(stock.items.values()).reduce((a, b) => a + b, 0);
+      const quantities = Array.from(stock.items.values()).reduce((a:number, b:any) => a + b, 0);
       if (stock.status === "IN") {
         totalIn += quantities;
       }
@@ -25,7 +27,7 @@ export async function GET(req: NextRequest) {
       map[stock.item] = stock.totalQuantity;
       return map;
     }, {}); // This will map each item to its totalQuantity
-
+console.log(totalStockMap)
     // Step 3: Calculate totalOut by summing quantities from PartnerTransaction
     let totalOut = 0;
 
