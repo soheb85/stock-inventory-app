@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -12,7 +12,7 @@ export const authOptions = {
       async authorize(credentials) {
         // Replace with actual authentication logic
         const user = { id: "1", email: "abubs@app.com", password: "Abub8585" };
-        
+
         if (
           credentials?.email === user.email &&
           credentials?.password === user.password
@@ -30,4 +30,5 @@ export const authOptions = {
 };
 
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
